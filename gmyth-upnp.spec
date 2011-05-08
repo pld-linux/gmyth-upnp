@@ -2,7 +2,7 @@ Summary:	Myth TV UPnP library based upon GLib/GObject paradigm
 Summary(pl.UTF-8):	Biblioteka Myth TV UPnP oparta na paradygmacie GLib/GObject
 Name:		gmyth-upnp
 Version:	0.7.1
-Release:	4
+Release:	5
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/gmyth/%{name}-%{version}.tar.gz
