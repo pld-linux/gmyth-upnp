@@ -2,14 +2,14 @@ Summary:	Myth TV UPnP library based upon GLib/GObject paradigm
 Summary(pl.UTF-8):	Biblioteka Myth TV UPnP oparta na paradygmacie GLib/GObject
 Name:		gmyth-upnp
 Version:	0.7.1
-Release:	7
+Release:	8
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/gmyth/%{name}-%{version}.tar.gz
 # Source0-md5:	f569d565c9cb12d50e88d23a603c7fcb
 URL:		http://gmyth.sourceforge.net/
-BuildRequires:	autoconf >= 2.50
-BuildRequires:	automake
+BuildRequires:	autoconf >= 2.52
+BuildRequires:	automake >= 1.6
 BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	gmyth-devel >= 0.7.1
 BuildRequires:	libtool
@@ -68,6 +68,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libgmythupnp.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -83,7 +86,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libgmythupnp.so
-%{_libdir}/libgmythupnp.la
 %{_includedir}/gmyth-upnp
 %{_pkgconfigdir}/gmyth-upnp.pc
 
