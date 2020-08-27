@@ -13,7 +13,7 @@ BuildRequires:	automake >= 1.6
 BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	gmyth-devel >= 0.7.1
 BuildRequires:	libtool
-BuildRequires:	libupnp-devel
+BuildRequires:	libupnp1.6-devel
 BuildRequires:	pkgconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
