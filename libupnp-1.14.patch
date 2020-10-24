@@ -1,0 +1,73 @@
+diff -ur gmyth-upnp-0.7.1/src/gmyth_upnp.c gmyth-upnp-0.7.1-libupnp-1.14/src/gmyth_upnp.c
+--- gmyth-upnp-0.7.1/src/gmyth_upnp.c	2008-03-03 14:49:54.000000000 +0100
++++ gmyth-upnp-0.7.1-libupnp-1.14/src/gmyth_upnp.c	2020-10-24 11:10:12.804310963 +0200
+@@ -138,7 +138,7 @@
+     priv->servers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+ 
+     /* initalize upnp client */
+-    ret = UpnpInit (NULL, 0);
++    ret = UpnpInit2 (NULL, 0);
+     if (ret != UPNP_E_SUCCESS)
+         g_warning ("Fail to inilialize upnp SDK: %d", ret);
+     else
+@@ -423,27 +423,27 @@
+         case UPNP_DISCOVERY_ADVERTISEMENT_ALIVE:
+         case UPNP_DISCOVERY_SEARCH_RESULT:
+         {
+-            struct Upnp_Discovery *d_event;
++            UpnpDiscovery *d_event;
+ 
+-            d_event = (struct Upnp_Discovery *) e;
++            d_event = (UpnpDiscovery *) e;
+ 
+-            if (strcmp (d_event->ServiceType, UPNP_SERVICE_FILTER) != 0)
++            if (strcmp (UpnpDiscovery_get_ServiceType_cstr(d_event), UPNP_SERVICE_FILTER) != 0)
+             {
+-                g_warning ("invalid device : %s", d_event->DeviceId);
++                g_warning ("invalid device : %s", UpnpDiscovery_get_DeviceID_cstr(d_event));
+                 break;
+             }
+ 
+ 
+-            if (d_event->ErrCode != UPNP_E_SUCCESS)
++            if (UpnpDiscovery_get_ErrCode(d_event) != UPNP_E_SUCCESS)
+             {
+-                g_warning ("Error in Discovery: %d", d_event->ErrCode);
++                g_warning ("Error in Discovery: %d", UpnpDiscovery_get_ErrCode(d_event));
+                 break;
+             }
+ 
+-            if (_find_service_by_uuid (GMYTH_UPNP (singleton), d_event->DeviceId) == NULL)
++            if (_find_service_by_uuid (GMYTH_UPNP (singleton), UpnpDiscovery_get_DeviceID_cstr(d_event)) == NULL)
+                 _append_mythtv_server_from_loation (singleton,
+-                                                    d_event->DeviceId,
+-                                                    d_event->Location);
++                                                    UpnpDiscovery_get_DeviceID_cstr(d_event),
++                                                    UpnpDiscovery_get_Location_cstr(d_event));
+ 
+ 
+             break;
+@@ -451,18 +451,18 @@
+         case UPNP_DISCOVERY_ADVERTISEMENT_BYEBYE:
+         {
+             GMythUPnPPrivate *priv;
+-            struct Upnp_Discovery *d_event;
++            UpnpDiscovery *d_event;
+ 
+-            d_event = (struct Upnp_Discovery *) e;
+-            if (d_event->ErrCode != UPNP_E_SUCCESS)
++            d_event = (UpnpDiscovery *) e;
++            if (UpnpDiscovery_get_ErrCode(d_event) != UPNP_E_SUCCESS)
+             {
+-                g_warning ("Error in Discovery: %d", d_event->ErrCode);
++                g_warning ("Error in Discovery: %d", UpnpDiscovery_get_ErrCode(d_event));
+                 break;
+             }
+ 
+             priv = GMYTH_UPNP_GET_PRIVATE (singleton);
+             _remove_mythtv_server (singleton,
+-                                   d_event->DeviceId);
++                                   UpnpDiscovery_get_DeviceID_cstr(d_event));
+ 
+             break;
+ 
